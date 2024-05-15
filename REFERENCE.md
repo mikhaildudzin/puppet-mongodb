@@ -87,7 +87,7 @@ Class for setting cross-class global overrides.
 
 class {'mongodb::globals':
   manage_package_repo => true,
-  repo_version        => '4.4',
+  repo_version        => '6.0',
 }
 -> class {'mongodb::client': }
 -> class {'mongodb::server': }
@@ -99,7 +99,7 @@ class {'mongodb::globals':
 
 class {'mongodb::globals':
   manage_package_repo => true,
-  repo_version        => '4.4',
+  repo_version        => '6.0',
   use_enterprise_repo => true,
 }
 -> class {'mongodb::client': }
@@ -869,6 +869,7 @@ The following parameters are available in the `mongodb::server` class:
 * [`tls_ca`](#-mongodb--server--tls_ca)
 * [`tls_conn_without_cert`](#-mongodb--server--tls_conn_without_cert)
 * [`tls_invalid_hostnames`](#-mongodb--server--tls_invalid_hostnames)
+* [`tls_invalid_certificates`](#-mongodb--server--tls_invalid_certificates)
 * [`tls_mode`](#-mongodb--server--tls_mode)
 * [`admin_password_hash`](#-mongodb--server--admin_password_hash)
 * [`restart`](#-mongodb--server--restart)
@@ -1084,11 +1085,11 @@ Default value: `undef`
 
 ##### <a name="-mongodb--server--fork"></a>`fork`
 
-Data type: `Boolean`
+Data type: `Optional[Boolean]`
 
 Set to true to fork server process at launch time. The default setting depends on the operating system.
 
-Default value: `false`
+Default value: `undef`
 
 ##### <a name="-mongodb--server--port"></a>`port`
 
@@ -1393,9 +1394,13 @@ Default value: `undef`
 
 ##### <a name="-mongodb--server--set_parameter"></a>`set_parameter`
 
-Data type: `Optional[Variant[String[1], Array[String[1]]]]`
+Data type: `Optional[Variant[String[1], Array[String[1]], Hash]]`
 
-Specify extra configuration file parameters (i.e. textSearchEnabled=true).
+Set MongoDB parameters
+Supported types:
+  String (i.e. 'textSearchEnabled=true' or 'textSearchEnabled: true' )
+  Array  (i.e. ['textSearchEnabled=true'] or ['textSearchEnabled: true'] )
+  Hash   (i.e. {'textSearchEnabled' => true}
 
 Default value: `undef`
 
@@ -1427,7 +1432,8 @@ Default value: `undef`
 
 Data type: `Optional[Hash]`
 
-A hash to allow for additional configuration options to be set in user-provided template.
+A hash to allow for additional configuration options to be set.
+(i.e {'security' => { 'javascriptEnabled' => false}})
 
 Default value: `undef`
 
@@ -1457,19 +1463,28 @@ Default value: `undef`
 
 ##### <a name="-mongodb--server--tls_conn_without_cert"></a>`tls_conn_without_cert`
 
-Data type: `Boolean`
+Data type: `Optional[Boolean]`
 
 Set to true to bypass client certificate validation for clients that do not present a certificate.
 
-Default value: `false`
+Default value: `undef`
 
 ##### <a name="-mongodb--server--tls_invalid_hostnames"></a>`tls_invalid_hostnames`
 
-Data type: `Boolean`
+Data type: `Optional[Boolean]`
 
 Set to true to disable the validation of the hostnames in TLS certificates.
 
-Default value: `false`
+Default value: `undef`
+
+##### <a name="-mongodb--server--tls_invalid_certificates"></a>`tls_invalid_certificates`
+
+Data type: `Optional[Boolean]`
+
+Enable or disable the validation checks for TLS certificates on other servers in the cluster and allows the use of
+invalid certificates to connect.
+
+Default value: `undef`
 
 ##### <a name="-mongodb--server--tls_mode"></a>`tls_mode`
 
